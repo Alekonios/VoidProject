@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3 uid="uid://dqioxuc7b0g60"]
+
+[ext_resource type="Script" path="res://assets/scenes/test/main_test_level/test.gd" id="1_ar5cc"]
+[ext_resource type="PackedScene" uid="uid://dy04o2ojh020i" path="res://assets/scenes/objects/items/usable_objects/mop/mop.tscn" id="2_fi4dr"]
+[ext_resource type="Material" uid="uid://dm157s57mfhfe" path="res://assets/textures/protoype_textures/materials/dark/material_02.tres" id="3_bahg3"]
+[ext_resource type="Script" path="res://components/gravity_area/gravity_area.gd" id="4_7bba2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2agig"]
+size = Vector3(11.2188, 6.06647, 10.4789)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cqvef"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_rovn1"]
+
+[sub_resource type="Sky" id="Sky_anee6"]
+sky_material = SubResource("PhysicalSkyMaterial_rovn1")
+
+[sub_resource type="Environment" id="Environment_0tty1"]
+background_mode = 2
+sky = SubResource("Sky_anee6")
+tonemap_mode = 2
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.272326, 0.298018, 0.338405, 1)
+fog_light_energy = 0.0
+fog_density = 1.0
+fog_sky_affect = 0.126
+volumetric_fog_sky_affect = 0.453
+
+[node name="TestGravity" type="Node3D"]
+script = ExtResource("1_ar5cc")
+
+[node name="spawn_points" type="Node3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="spawn_points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.88248, 0)
+
+[node name="player_node" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9585, 8.66496, -3.2344)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://assets/scenes/charapters/Y-bot/Y-bot.tscn", "res://assets/scenes/objects/items/usable_objects/mop/mop.tscn")
+spawn_path = NodePath("../player_node")
+spawn_limit = 5
+
+[node name="mop" parent="." instance=ExtResource("2_fi4dr")]
+transform = Transform3D(0.693351, -0.638471, 0.334095, 0.720097, 0.596572, -0.354347, 0.0269286, 0.486268, 0.873395, -3.95946, 2.25298, -11.5757)
+
+[node name="GravityArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 12.4907)
+collision_layer = 0
+collision_mask = 21
+gravity_space_override = 3
+gravity_point = true
+script = ExtResource("4_7bba2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GravityArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.546783, 0.0694275, 0.0494995)
+shape = SubResource("BoxShape3D_2agig")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 12.4907)
+material_override = ExtResource("3_bahg3")
+use_collision = true
+collision_layer = 2
+collision_mask = 0
+size = Vector3(7.3174, 1, 6.99225)
+material = SubResource("StandardMaterial3D_cqvef")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0tty1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.317375, 0.791425, -0.522416, 0.193971, 0.593429, 0.781164, 0.92825, 0.146589, -0.341853, 0, 3.94927, 0)
+shadow_enabled = true
+
+[connection signal="area_entered" from="GravityArea" to="GravityArea" method="_on_area_entered"]
+[connection signal="area_exited" from="GravityArea" to="GravityArea" method="_on_area_exited"]
