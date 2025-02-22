@@ -21,7 +21,7 @@ var GravityCount = 4.5
 var running = false
 
 # Параметры камеры
-@export var mouseSpeed = 300.0
+@export var mouseSpeed = 0.05
 var lookAngles = Vector2.ZERO
 
 func _enter_tree() -> void:
@@ -42,11 +42,9 @@ func _physics_process(delta: float) -> void:
 		global_rotation.z = lerp_angle(global_rotation.z, TargetRotation.z, delta * 12)
 	if !is_multiplayer_authority(): return
 
-	handle_camera_rotation(delta)
 	handle_movement(delta)
 
-func handle_camera_rotation(delta: float) -> void:
-	$"T-BOTv3/Marker3D".rotation = Vector3(lookAngles.y, lookAngles.x, 0)
+	
 
 func handle_movement(delta: float) -> void:
 	if Input.is_action_pressed("Run") and !Input.is_action_pressed("MoveDown"):
@@ -75,11 +73,11 @@ func handle_movement(delta: float) -> void:
 			GravityCount = lerp(GravityCount, StartGravity, 0.01)
 	else:
 		if direction:
-			var forward_dir = $"T-BOTv3/Marker3D".transform.basis.z * 1
-			forward_dir = forward_dir.normalized()
-			velocity.x = lerp(velocity.x, forward_dir.x * Speed * 1.2, 20 * delta)
-			velocity.z = lerp(velocity.z, forward_dir.z * Speed * 1.2, 20 * delta)
-			velocity.y = lerp(velocity.y, forward_dir.y * Speed * 1.2, 20 * delta)
+			var QuatDirection = Vector3.FORWARD
+			QuatDirection *= $Camera_Node.quaternion.inverse()
+			velocity.z = lerp(velocity.z, QuatDirection.z * Speed * -direction.z * 1.2, 20 * delta)
+			velocity.y = lerp(velocity.y, QuatDirection.y * Speed * 1.2, 20 * delta)
+			velocity.x = lerp(velocity.x, direction.x * Speed * 1.2, 20 * delta)
 			_Components._StateMachine.CurrentState = _Components._StateMachine.Swiming
 			GravityCount = lerp(GravityCount, 0.0, 0.01)
 		else:
@@ -97,7 +95,3 @@ func handle_movement(delta: float) -> void:
 		velocity.y = GravityCount
 
 	move_and_slide()
-
-func _input(event):
-	if event is InputEventMouseMotion:
-		lookAngles -= event.relative / mouseSpeed

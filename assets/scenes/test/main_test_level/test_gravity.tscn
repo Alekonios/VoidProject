@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dqioxuc7b0g60"]
+[gd_scene load_steps=11 format=3 uid="uid://dqioxuc7b0g60"]
 
 [ext_resource type="Script" path="res://assets/scenes/test/main_test_level/test.gd" id="1_ar5cc"]
 [ext_resource type="PackedScene" uid="uid://dy04o2ojh020i" path="res://assets/scenes/objects/items/usable_objects/mop/mop.tscn" id="2_fi4dr"]
 [ext_resource type="Material" uid="uid://dm157s57mfhfe" path="res://assets/textures/protoype_textures/materials/dark/material_02.tres" id="3_bahg3"]
 [ext_resource type="Script" path="res://components/gravity_area/gravity_area.gd" id="4_7bba2"]
+[ext_resource type="Material" uid="uid://8ylcw0h1lkhg" path="res://assets/textures/protoype_textures/materials/orange/material_01.tres" id="5_w1i5c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2agig"]
 size = Vector3(11.2188, 6.06647, 10.4789)
@@ -48,7 +49,7 @@ spawn_limit = 5
 transform = Transform3D(0.693351, -0.638471, 0.334095, 0.720097, 0.596572, -0.354347, 0.0269286, 0.486268, 0.873395, -3.95946, 2.25298, -11.5757)
 
 [node name="GravityArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 12.4907)
+transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 33.0778)
 collision_layer = 0
 collision_mask = 21
 gravity_space_override = 3
@@ -60,7 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.546783, 0.0694275, 0.04949
 shape = SubResource("BoxShape3D_2agig")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 12.4907)
+transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 33.0778)
 material_override = ExtResource("3_bahg3")
 use_collision = true
 collision_layer = 2
@@ -74,6 +75,20 @@ environment = SubResource("Environment_0tty1")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(-0.317375, 0.791425, -0.522416, 0.193971, 0.593429, 0.781164, 0.92825, 0.146589, -0.341853, 0, 3.94927, 0)
 shadow_enabled = true
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+material_override = ExtResource("5_w1i5c")
+radius = 2.90794
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6782, -2.11276, 13.9631)
+material_override = ExtResource("5_w1i5c")
+radius = 1.62249
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.2426, -2.11276, 0.236519)
+material_override = ExtResource("5_w1i5c")
+radius = 4.80008
 
 [connection signal="area_entered" from="GravityArea" to="GravityArea" method="_on_area_entered"]
 [connection signal="area_exited" from="GravityArea" to="GravityArea" method="_on_area_exited"]

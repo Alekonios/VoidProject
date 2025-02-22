@@ -25,8 +25,6 @@ func _input(event: InputEvent) -> void:
 			CameraNode.rotate_x(deg_to_rad(-event.relative.y * MouseSens))
 			CameraNode.rotation.x = clamp(CameraNode.rotation.x, deg_to_rad(-70), deg_to_rad(90))
 		else:
-			Player.rotate_y(deg_to_rad(-event.relative.x * MouseSens))  # Вращение персонажа по горизонтали
-			$"../../T-BOTv3".rotate_x(deg_to_rad(-event.relative.y * MouseSens))  # Вращение персонажа по вертикали
+			Player.rotate_y(deg_to_rad(-event.relative.x * MouseSens))
 			CameraNode.rotate_x(deg_to_rad(-event.relative.y * MouseSens))
-			CameraNode.global_position = lerp(CameraNode.global_position, $"../../T-BOTv3/Armature_029/Skeleton3D/BoneAttachment3D/Marker3D".global_position, 0.1)
-			
+			CameraNode.rotation.x = clamp(CameraNode.rotation.x, deg_to_rad(-90), deg_to_rad(90))
