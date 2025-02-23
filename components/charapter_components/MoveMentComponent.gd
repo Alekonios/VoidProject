@@ -11,11 +11,13 @@ extends CharacterBody3D
 
 @export var RunSpeed : float = 4
 @export var StartSpeed : float = 2.5
+@export var StartGravitySpeed : float = 2.5
 @export var StartGravity : float = 4.5
 @export var HaveGravity : bool = false
 var GravityObject
 
 var Speed = 2.5
+var GravitySpeed = 2.5
 var GravityCount = 4.5
 
 var running = false
@@ -75,23 +77,22 @@ func handle_movement(delta: float) -> void:
 		if direction:
 			var QuatDirection = Vector3.FORWARD
 			QuatDirection *= $Camera_Node.quaternion.inverse()
-			velocity.z = lerp(velocity.z, QuatDirection.z * Speed * -direction.z * 1.2, 20 * delta)
-			velocity.y = lerp(velocity.y, QuatDirection.y * Speed * 1.2, 20 * delta)
-			velocity.x = lerp(velocity.x, direction.x * Speed * 1.2, 20 * delta)
+			velocity.z = lerp(velocity.z, QuatDirection.z * GravitySpeed * -direction.z * 0.3, 20 * delta)
+			velocity.y = lerp(velocity.y, QuatDirection.y * GravitySpeed * 0.3, 20 * delta)
+			velocity.x = lerp(velocity.x, direction.x * Speed * 0.3, 20 * delta)
 			_Components._StateMachine.CurrentState = _Components._StateMachine.Swiming
 			GravityCount = lerp(GravityCount, 0.0, 0.01)
 		else:
-			velocity.x = move_toward(velocity.x, 0, 0.06)
-			velocity.z = move_toward(velocity.z, 0, 0.06)
-			velocity.y = move_toward(velocity.y, 0, 0.06)
+			
 			_Components._StateMachine.CurrentState = _Components._StateMachine.Swim
 			GravityCount = lerp(GravityCount, 0.0, 0.01)
 
 	if not is_on_floor():
 		if HaveGravity:
 			velocity += get_gravity() * delta
-
+			
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		_Components._StateMachine.JumpAnim.rpc()
 		velocity.y = GravityCount
 
 	move_and_slide()

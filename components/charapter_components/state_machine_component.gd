@@ -15,9 +15,6 @@ var CurrentState = Idle
 func _process(delta: float) -> void:
 	if Animator.animation_player_changed:
 		update_states()
-	if Input.is_action_just_pressed("ui_accept"):
-		if !is_multiplayer_authority(): return
-		JumpAnim.rpc()
 
 func update_states():
 	if !is_multiplayer_authority(): return

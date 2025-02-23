@@ -1,32 +1,53 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqioxuc7b0g60"]
+[gd_scene load_steps=14 format=3 uid="uid://dqioxuc7b0g60"]
 
 [ext_resource type="Script" path="res://assets/scenes/test/main_test_level/test.gd" id="1_ar5cc"]
 [ext_resource type="PackedScene" uid="uid://dy04o2ojh020i" path="res://assets/scenes/objects/items/usable_objects/mop/mop.tscn" id="2_fi4dr"]
 [ext_resource type="Material" uid="uid://dm157s57mfhfe" path="res://assets/textures/protoype_textures/materials/dark/material_02.tres" id="3_bahg3"]
-[ext_resource type="Script" path="res://components/gravity_area/gravity_area.gd" id="4_7bba2"]
+[ext_resource type="PackedScene" uid="uid://cq3ppcpxxo2l3" path="res://components/gravity_area/gravity_area.tscn" id="3_sgd6r"]
+[ext_resource type="Shader" path="res://assets/shaders/SkyShader.gdshader" id="5_mfrh6"]
 [ext_resource type="Material" uid="uid://8ylcw0h1lkhg" path="res://assets/textures/protoype_textures/materials/orange/material_01.tres" id="5_w1i5c"]
+[ext_resource type="PackedScene" uid="uid://bce7otx8wrfvx" path="res://assets/scenes/ships/scout_ship/ScoutShip.tscn" id="7_iq5d4"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2agig"]
-size = Vector3(11.2188, 6.06647, 10.4789)
+[sub_resource type="BoxShape3D" id="BoxShape3D_wuoub"]
+size = Vector3(33.9895, 14.7899, 79.9709)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cqvef"]
 
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_rovn1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pnmyk"]
+shader = ExtResource("5_mfrh6")
+shader_parameter/sky_color = Color(0, 0, 0, 1)
+shader_parameter/star_base_color = Color(1, 1, 1, 1)
+shader_parameter/star_hue_offset = 0.6
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 28.889
+shader_parameter/layer_scale_step = 16.42
+shader_parameter/layers_count = 3
 
-[sub_resource type="Sky" id="Sky_anee6"]
-sky_material = SubResource("PhysicalSkyMaterial_rovn1")
+[sub_resource type="Sky" id="Sky_mfq5w"]
+sky_material = SubResource("ShaderMaterial_pnmyk")
 
 [sub_resource type="Environment" id="Environment_0tty1"]
 background_mode = 2
-sky = SubResource("Sky_anee6")
+sky = SubResource("Sky_mfq5w")
+ambient_light_source = 3
 tonemap_mode = 2
-fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0.272326, 0.298018, 0.338405, 1)
-fog_light_energy = 0.0
+fog_light_color = Color(0, 0, 0, 1)
 fog_density = 1.0
-fog_sky_affect = 0.126
+fog_sky_affect = 0.632
+fog_depth_curve = 0.00176028
+fog_depth_begin = 0.0
+fog_depth_end = 336.8
 volumetric_fog_sky_affect = 0.453
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kn4fn"]
+albedo_color = Color(0, 1, 1, 1)
+metallic = 0.58
+rim_enabled = true
+clearcoat_enabled = true
+anisotropy_enabled = true
 
 [node name="TestGravity" type="Node3D"]
 script = ExtResource("1_ar5cc")
@@ -38,7 +59,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.88248, 0)
 
 [node name="player_node" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9585, 8.66496, -3.2344)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.8891, 3.30137, 24.6496)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://assets/scenes/charapters/Y-bot/Y-bot.tscn", "res://assets/scenes/objects/items/usable_objects/mop/mop.tscn")
@@ -48,25 +69,21 @@ spawn_limit = 5
 [node name="mop" parent="." instance=ExtResource("2_fi4dr")]
 transform = Transform3D(0.693351, -0.638471, 0.334095, 0.720097, 0.596572, -0.354347, 0.0269286, 0.486268, 0.873395, -3.95946, 2.25298, -11.5757)
 
-[node name="GravityArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 33.0778)
-collision_layer = 0
-collision_mask = 21
-gravity_space_override = 3
-gravity_point = true
-script = ExtResource("4_7bba2")
+[node name="GravityArea" parent="." instance=ExtResource("3_sgd6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.64246, 0, 26.9749)
+collision_mask = 53
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GravityArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.546783, 0.0694275, 0.0494995)
-shape = SubResource("BoxShape3D_2agig")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.466942, 3.36726, 23.1051)
+shape = SubResource("BoxShape3D_wuoub")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.229523, -0.973303, 0, 0.973303, 0.229523, -12.3493, 0, 33.0778)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.48175, 0, 50.8372)
 material_override = ExtResource("3_bahg3")
 use_collision = true
 collision_layer = 2
 collision_mask = 0
-size = Vector3(7.3174, 1, 6.99225)
+size = Vector3(33.6257, 1, 77.476)
 material = SubResource("StandardMaterial3D_cqvef")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -81,7 +98,7 @@ material_override = ExtResource("5_w1i5c")
 radius = 2.90794
 
 [node name="CSGSphere3D2" type="CSGSphere3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6782, -2.11276, 13.9631)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.9487, 16.705, 13.9631)
 material_override = ExtResource("5_w1i5c")
 radius = 1.62249
 
@@ -90,5 +107,185 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.2426, -2.11276, 0.236519)
 material_override = ExtResource("5_w1i5c")
 radius = 4.80008
 
-[connection signal="area_entered" from="GravityArea" to="GravityArea" method="_on_area_entered"]
-[connection signal="area_exited" from="GravityArea" to="GravityArea" method="_on_area_exited"]
+[node name="CSGSphere3D4" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 27.2949)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D5" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 29.7724)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D6" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 32.7546)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D7" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 27.2949)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D8" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 29.7724)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D9" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 32.7546)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D10" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 35.0984)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D11" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 37.5759)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D12" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 40.5581)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D13" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 35.0984)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D14" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 37.5759)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D15" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 40.5581)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D16" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 42.7669)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D17" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 45.2444)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D18" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.513226, 1.61489, 48.2266)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D19" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 42.7669)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D20" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 45.2444)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="CSGSphere3D21" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.4751, 1.61489, 48.2266)
+material = SubResource("StandardMaterial3D_kn4fn")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="CSGSphere3D21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278256, 0, 0)
+light_color = Color(0.721569, 1, 1, 1)
+shadow_enabled = true
+omni_range = 3.43312
+
+[node name="ScoutShip" parent="." instance=ExtResource("7_iq5d4")]
+transform = Transform3D(-0.0145381, 0, 0.999894, 0, 1, 0, -0.999894, 0, -0.0145381, -7.7482, 6.19602, 40.5724)

@@ -13,6 +13,7 @@ config_version=5
 config/name="VoidProject"
 run/main_scene="res://user_interface/Main_Menu/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
+run/max_fps=120
 config/icon="res://icon.svg"
 
 [input]
@@ -75,3 +76,4 @@ ScrollDown={
 3d_physics/layer_3="PhysicsObject"
 3d_physics/layer_4="Enemy"
 3d_physics/layer_5="Hitbox"
+3d_physics/layer_6="Ship"
